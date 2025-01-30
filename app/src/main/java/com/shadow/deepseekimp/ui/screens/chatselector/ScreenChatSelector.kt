@@ -29,7 +29,8 @@ import com.shadow.deepseekimp.ui.nav.NavigationController
 import com.shadow.deepseekimp.R
 import com.shadow.deepseekimp.ui.baseui.MainButton
 import com.shadow.deepseekimp.ui.baseui.MainButtonOutlined
-import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_HISTORY
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_ONE
 
 @Composable
 fun ScreenChatSelector(
@@ -87,18 +88,23 @@ fun ScreenChatSelector(
                 with(sharedTransitionScope) {
                     MainButton(
                         modifier.sharedBounds(
-                            sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY),
+                            sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY_ONE),
                             animatedVisibilityScope = animatedVisibilityScope
                         ),
                         buttonText = stringResource(R.string.chat_selector_one_chat)
                     ) {
-                        navigationController.navigate(NavScreens.ChatScreen(ChatType.ONE_TIME.name))
+                        navigationController.navigate(NavScreens.ChatScreen(ChatType.ONE_TIME.name, SHARED_TITLE_KEY_ONE))
                     }
-                }
-
                 MainButtonOutlined(
+                    modifier.sharedBounds(
+                        sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY_HISTORY),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    ),
                     buttonText = stringResource(R.string.chat_selector_history)
-                ) { }
+                ) {
+                    navigationController.navigate(NavScreens.ChatScreen(ChatType.HISTORY.name, SHARED_TITLE_KEY_HISTORY))
+                }
+                }
             }
         }
     }

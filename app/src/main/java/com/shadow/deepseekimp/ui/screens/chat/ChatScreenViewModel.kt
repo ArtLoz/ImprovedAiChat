@@ -41,7 +41,7 @@ class ChatScreenViewModel @Inject constructor(
     }
 
     private fun addAiChatPrompt() {
-        io{
+        io {
             _screenModel.update {
                 it.copy(
                     chatItems = it.chatItems + listOf(
@@ -53,8 +53,8 @@ class ChatScreenViewModel @Inject constructor(
                     )
                 )
             }
-            if(chatType ==ChatType.ONE_TIME) return@io
-            when(val useCaseResult = getHistoryMessageListUseCase(aiModel)){
+            if (chatType == ChatType.ONE_TIME) return@io
+            when (val useCaseResult = getHistoryMessageListUseCase(aiModel)) {
                 is UseCaseResult.Error -> Unit
                 is UseCaseResult.Success -> {
                     _screenModel.update {
@@ -95,7 +95,11 @@ class ChatScreenViewModel @Inject constructor(
             }
             .collect { result ->
                 when (result) {
-                    is UseCaseResult.Error -> Log.d("ChatScreenViewModel", "Error: ${result.message}")
+                    is UseCaseResult.Error -> Log.d(
+                        "ChatScreenViewModel",
+                        "Error: ${result.message}"
+                    )
+
                     is UseCaseResult.Success -> {
                         addBotMessageToChat(result.model)
                     }
@@ -134,7 +138,7 @@ class ChatScreenViewModel @Inject constructor(
                 chatItems = it.chatItems + listOf(model)
             )
         }
-        if(chatType ==ChatType.ONE_TIME) return
+        if (chatType == ChatType.ONE_TIME) return
         addChatMessageToHistoryUseCase(model)
 
     }

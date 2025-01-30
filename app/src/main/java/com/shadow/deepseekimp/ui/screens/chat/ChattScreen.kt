@@ -41,7 +41,7 @@ import com.shadow.deepseekimp.ui.baseui.ChatUserMessage
 import com.shadow.deepseekimp.ui.nav.ChatType
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
-import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_HISTORY
 
 @Composable
 fun ChatScreen(
@@ -51,6 +51,7 @@ fun ChatScreen(
     navigationController: NavigationController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    animationKey:String
 ) {
     val screenModel = viewModel.screenModel.collectAsState().value
     Column(
@@ -62,7 +63,8 @@ fun ChatScreen(
         ChatBar(
             chatName = stringResource(chatType.value),
             animatedVisibilityScope = animatedVisibilityScope,
-            sharedTransitionScope = sharedTransitionScope
+            sharedTransitionScope = sharedTransitionScope,
+            animationKey = animationKey
         )
         ChatComponent(
             modifier = Modifier
@@ -87,7 +89,8 @@ fun ChatBar(
     modifier: Modifier = Modifier,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    chatName: String
+    chatName: String,
+    animationKey: String
 ) {
     with(sharedTransitionScope) {
         Row(
@@ -99,7 +102,7 @@ fun ChatBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .sharedBounds(
-                        sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY),
+                        sharedContentState = rememberSharedContentState(animationKey),
                         animatedVisibilityScope = animatedVisibilityScope,
                     ),
                 text = chatName,

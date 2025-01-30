@@ -28,12 +28,12 @@ fun AppNavGraph(
                 )
             }
             composable<NavScreens.ChatScreen> {
-                val name = it.toRoute<NavScreens.ChatScreen>().chadTypeString
                 ChatScreen(
                     navigationController = navigationController,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this,
-                    chatType = ChatType.valueOf(name)
+                    chatType = ChatType.valueOf(it.toRoute<NavScreens.ChatScreen>().chadTypeString),
+                    animationKey = it.toRoute<NavScreens.ChatScreen>().animationKey
                 )
             }
         }

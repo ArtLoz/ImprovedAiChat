@@ -11,6 +11,7 @@ sealed class NavScreens {
     @Serializable
     data class ChatScreen(
         val chadTypeString: String,
+        val animationKey:String
     ) : NavScreens()
 }
 
