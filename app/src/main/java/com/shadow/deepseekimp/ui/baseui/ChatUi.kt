@@ -1,5 +1,6 @@
 package com.shadow.deepseekimp.ui.baseui
 
+import android.content.ClipboardManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shadow.deepseekimp.R
@@ -33,8 +36,8 @@ import kotlinx.coroutines.delay
 fun ChatAiMessage(
     modifier: Modifier = Modifier,
     message: String,
-    onClickCopy: () -> Unit,
 ) {
+    val clipboardManager = LocalClipboardManager.current
     Row(
         modifier = modifier
             .padding(vertical = 6.dp)
@@ -59,7 +62,7 @@ fun ChatAiMessage(
                     modifier = Modifier
                         .size(22.dp)
                         .clickable {
-                            onClickCopy()
+                          clipboardManager.setText(AnnotatedString( message))
                         },
                     painter = painterResource(R.drawable.ic_copy),
                     contentDescription = null

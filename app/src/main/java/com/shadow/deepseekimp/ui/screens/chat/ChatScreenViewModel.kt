@@ -8,7 +8,6 @@ import com.shadow.deepseekimp.domain.chat.SendMessageToAiUseCaseTest
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
-import com.shadow.deepseekimp.ui.utils.findAndReplaceOrAdd
 import com.shadow.deepseekimp.ui.utils.io
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,8 +62,6 @@ class ChatScreenViewModel @Inject constructor(
                             addBotMessageToChat(result.model)
                         }
                     }
-                    Log.d("ChatScreenViewModel22", "onSendMessageToAi: ${result}")
-
                 }
         }
 

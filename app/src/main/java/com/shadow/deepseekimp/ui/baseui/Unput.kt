@@ -31,7 +31,6 @@ fun ChatInput(
     onSendClick: () -> Unit
 ) {
 
-    val focusManager = LocalFocusManager.current
     TextField(
         modifier = modifier,
         value = value,
@@ -51,7 +50,6 @@ fun ChatInput(
                 modifier = Modifier
                     .clickable(
                         onClick = {
-                            focusManager.clearFocus()
                             onSendClick.invoke()
                         },
                         interactionSource = null,
@@ -66,7 +64,6 @@ fun ChatInput(
         ),
         keyboardActions = KeyboardActions(
             onSend = {
-                focusManager.clearFocus()
                 onSendClick.invoke()
             }
         )
