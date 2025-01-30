@@ -17,9 +17,9 @@ android {
         applicationId = "com.shadow.deepseekimp"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = providers.gradleProperty("trainrVersionCode").get().toInt()
+        versionName = providers.gradleProperty("trainrVersionName").get()
+        setProperty("archivesBaseName", "${providers.gradleProperty("trainrName").get()} ${versionName}")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BASE_URL_DEEP", "\"https://api.deepseek.com/\"")
         buildConfigField("String", "BASE_URL_QWEN", "\"https://dashscope-intl.aliyuncs.com/\"")

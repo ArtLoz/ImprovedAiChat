@@ -91,6 +91,7 @@ class ChatScreenViewModel @Inject constructor(
                 _screenModel.update { it.copy(botWrite = true) }
             }
             .onCompletion {
+                if(chatType == ChatType.ONE_TIME) return@onCompletion
                 addChatMessageToHistoryUseCase(_screenModel.value.chatItems.last())
             }
             .collect { result ->
