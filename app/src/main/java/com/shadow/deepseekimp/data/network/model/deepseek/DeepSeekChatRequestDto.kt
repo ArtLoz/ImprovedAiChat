@@ -10,5 +10,5 @@ data class DeepSeekChatRequestDto(
     val messages: List<DeepSeekMessageDto>,
     @SerialName("model")
     val model: String = "deepseek-chat",
-    val stream:Boolean = true
+    val stream:Boolean
 )

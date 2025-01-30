@@ -1,5 +1,6 @@
 package com.shadow.deepseekimp.data.network.utils
 
+import android.util.Log
 import com.shadow.deepseekimp.BuildConfig
 import com.shadow.deepseekimp.data.datastore.DataStoreHelper
 import kotlinx.coroutines.runBlocking
@@ -12,13 +13,15 @@ class AddHeaderTokenInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestUrl = chain.request().url.host
+        Log.d("AddHeaderTokenInterceptor", "requestUrl: $requestUrl")
         val token = runBlocking {
-            if (requestUrl.contains(BuildConfig.BASE_URL_DEEP)) {
+            if (BuildConfig.BASE_URL_DEEP.contains(requestUrl)) {
                 dataStoreHelper.getTokenForDeepSeek()
             } else {
                 dataStoreHelper.getTokenForQwen()
             }
         }
+        Log.d("AddHeaderTokenInterceptor", "token: $token")
         val request = chain.request().newBuilder()
         request.addHeader("Authorization", "Bearer $token")
         return chain.proceed(request.build())

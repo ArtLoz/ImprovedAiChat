@@ -3,7 +3,7 @@ package com.shadow.deepseekimp.ui
 import androidx.lifecycle.ViewModel
 import com.shadow.deepseekimp.data.service.RemoveConfigureController
 import com.shadow.deepseekimp.data.datastore.DataStoreHelper
-import com.shadow.deepseekimp.ui.utils.io
+import com.shadow.deepseekimp.ui.baseui.io
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

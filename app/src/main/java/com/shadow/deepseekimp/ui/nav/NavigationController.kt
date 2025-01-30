@@ -1,13 +1,6 @@
-package com.app.trainr.ui.nav
+package com.shadow.deepseekimp.ui.nav
 
-import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 

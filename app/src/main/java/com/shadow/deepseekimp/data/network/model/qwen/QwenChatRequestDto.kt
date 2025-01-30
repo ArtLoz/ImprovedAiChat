@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class QwenChatRequestDto(
     val messages: List<QwenMessageDto>,
     val model: String = "qwen-max",
-    val stream: Boolean = true
+    val stream: Boolean
 )

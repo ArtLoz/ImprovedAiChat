@@ -1,6 +1,4 @@
-package com.app.trainr.ui.nav
-
-import android.util.Log
+package com.shadow.deepseekimp.ui.nav
 
 fun checkClassRoute(currentRoute: String?, route: Any): Boolean {
     return currentRoute?.contains(route::class.qualifiedName.toString().replace(".Companion", ""))

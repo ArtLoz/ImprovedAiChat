@@ -1,7 +1,8 @@
-package com.shadow.deepseekimp.domain.chat
+package com.shadow.deepseekimp.domain.usecase.chat
 
 import android.util.Log
 import com.shadow.deepseekimp.data.repository.ChatRepository
+import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import javax.inject.Inject
 

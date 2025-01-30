@@ -1,10 +1,10 @@
 package com.shadow.deepseekimp.ui.screens.chat
 
 import android.util.Log
-import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,44 +14,43 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.shadow.deepseekimp.domain.chat.ChatItemModel
+import com.shadow.deepseekimp.domain.model.chat.Author
+import com.shadow.deepseekimp.ui.nav.NavigationController
+import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.ui.baseui.ChatAiMessage
 import com.shadow.deepseekimp.ui.baseui.ChatAiMessageAnimation
 import com.shadow.deepseekimp.ui.baseui.ChatInput
 import com.shadow.deepseekimp.ui.baseui.ChatUserMessage
+import com.shadow.deepseekimp.ui.nav.ChatType
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY
 
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
-    viewModel: ChatScreenViewModel = hiltViewModel()
+    viewModel: ChatScreenViewModel = hiltViewModel(),
+    chatType: ChatType,
+    navigationController: NavigationController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     val screenModel = viewModel.screenModel.collectAsState().value
     Column(
@@ -59,7 +58,12 @@ fun ChatScreen(
             .imePadding()
             .fillMaxHeight()
     ) {
-        ChatBar(chatName = "Chat")
+        LaunchedEffect(Unit) { viewModel.setupChatType(chatType) }
+        ChatBar(
+            chatName = stringResource(chatType.value),
+            animatedVisibilityScope = animatedVisibilityScope,
+            sharedTransitionScope = sharedTransitionScope
+        )
         ChatComponent(
             modifier = Modifier
                 .padding(horizontal = 14.dp)
@@ -81,19 +85,28 @@ fun ChatScreen(
 @Composable
 fun ChatBar(
     modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     chatName: String
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = chatName,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium
-        )
+    with(sharedTransitionScope) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .sharedBounds(
+                        sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                    ),
+                text = chatName,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
     }
 }
 
@@ -103,33 +116,38 @@ fun ChatComponent(
     screenModel: ChatScreenModel
 ) {
     var keyboardHeight by remember { mutableFloatStateOf(0f) }
+    var lastCurrentChatItem by remember { mutableIntStateOf(0) }
     val lazyScreenState = rememberLazyListState()
     val keyboardHeightCurrent = WindowInsets.ime.getBottom(LocalDensity.current).toFloat()
 
-    LaunchedEffect(key1 =screenModel.chatItems) {
-        if (screenModel.chatItems.lastOrNull()?.author == ChatItemModel.Author.ME) {
+    LaunchedEffect(key1 = screenModel.chatItems) {
+        if (screenModel.chatItems.lastOrNull()?.author == Author.ME) {
             lazyScreenState.animateScrollToItem(screenModel.chatItems.size)
         }
         if (lazyScreenState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == screenModel.chatItems.lastIndex) {
             lazyScreenState.scrollToItem(lazyScreenState.layoutInfo.totalItemsCount)
         }
+        if(screenModel.chatItems.size - lastCurrentChatItem > 2){
+            lazyScreenState.scrollToItem(screenModel.chatItems.size)
+        }
+        lastCurrentChatItem = screenModel.chatItems.size
     }
 
     LaunchedEffect(keyboardHeightCurrent) {
-            val currentKeyboardSize = keyboardHeightCurrent - keyboardHeight
-            if(lazyScreenState.canScrollForward) lazyScreenState.scrollBy(currentKeyboardSize)
-            keyboardHeight = keyboardHeightCurrent
+        val currentKeyboardSize = keyboardHeightCurrent - keyboardHeight
+        if (lazyScreenState.canScrollForward) lazyScreenState.scrollBy(currentKeyboardSize)
+        keyboardHeight = keyboardHeightCurrent
     }
     LazyColumn(
         state = lazyScreenState,
         modifier = modifier
     ) {
 
-        items(items = screenModel.chatItems, key = { item -> item.id}){ item ->
+        items(items = screenModel.chatItems, key = { item -> item.id }) { item ->
             when (item.author) {
-                ChatItemModel.Author.ME -> ChatUserMessage(message = item.message)
-                ChatItemModel.Author.BOT -> ChatAiMessage(message = item.message)
-                ChatItemModel.Author.SYSTEM -> Unit
+                Author.ME -> ChatUserMessage(message = item.message)
+                Author.BOT -> ChatAiMessage(message = item.message)
+                Author.SYSTEM -> Unit
             }
         }
         if (screenModel.botWrite) {

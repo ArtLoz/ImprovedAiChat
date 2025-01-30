@@ -1,5 +1,7 @@
-package com.shadow.deepseekimp.ui.screens
+package com.shadow.deepseekimp.ui.screens.chatselector
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,16 +22,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shadow.deepseekimp.ui.nav.ChatType
+import com.shadow.deepseekimp.ui.nav.NavScreens
+import com.shadow.deepseekimp.ui.nav.NavigationController
 import com.shadow.deepseekimp.R
 import com.shadow.deepseekimp.ui.baseui.MainButton
 import com.shadow.deepseekimp.ui.baseui.MainButtonOutlined
-import com.shadow.deepseekimp.ui.theme.colorDeepSeek
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ScreenChatSelector(modifier: Modifier = Modifier) {
+fun ScreenChatSelector(
+    modifier: Modifier = Modifier,
+    navigationController: NavigationController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -76,11 +84,18 @@ fun ScreenChatSelector(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MainButton(
-                    buttonText = stringResource(R.string.chat_selector_one_chat)
-                ) {
-
+                with(sharedTransitionScope) {
+                    MainButton(
+                        modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(SHARED_TITLE_KEY),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                        buttonText = stringResource(R.string.chat_selector_one_chat)
+                    ) {
+                        navigationController.navigate(NavScreens.ChatScreen(ChatType.ONE_TIME.name))
+                    }
                 }
+
                 MainButtonOutlined(
                     buttonText = stringResource(R.string.chat_selector_history)
                 ) { }

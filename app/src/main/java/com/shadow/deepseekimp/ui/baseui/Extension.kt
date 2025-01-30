@@ -1,10 +1,8 @@
-package com.shadow.deepseekimp.ui.utils
+package com.shadow.deepseekimp.ui.baseui
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

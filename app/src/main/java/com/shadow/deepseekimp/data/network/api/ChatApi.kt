@@ -19,6 +19,12 @@ interface ChatApi {
         @Body model: DeepSeekChatRequestDto
     ): Response<DeepSeekChatResponseDto>
 
+    @Streaming
+    @POST("chat/completions")
+    fun sendMessageToDeepSeekStream(
+        @Body model: DeepSeekChatRequestDto
+    ): Call<ResponseBody>
+
     @POST("${BuildConfig.BASE_URL_QWEN}compatible-mode/v1/chat/completions")
     suspend fun sendMessageToQwen(
         @Body model: QwenChatRequestDto

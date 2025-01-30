@@ -7,11 +7,17 @@ import androidx.room.PrimaryKey
 data class ChatDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val role: Int,
+    val role: String,
     val message: String,
-    val timestamp: Long
-    ) {
-    enum class Role(val type: Int, val value: String) {
-        ASSISTANT(0, "assistant"), USER(1, "user")
+    val timestamp: Long,
+    val aiModel: String,
+
+) {
+    enum class Role() {
+        ASSISTANT, USER, SYSTEM
+    }
+
+    enum class AiModelDb {
+        QWEEN, DEEPSEEK
     }
 }

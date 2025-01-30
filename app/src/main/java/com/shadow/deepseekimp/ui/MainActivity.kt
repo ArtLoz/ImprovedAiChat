@@ -13,7 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.shadow.deepseekimp.ui.screens.chat.ChatScreen
+import com.shadow.deepseekimp.ui.nav.AppNavGraph
+import com.shadow.deepseekimp.ui.nav.rememberNavigationController
 import com.shadow.deepseekimp.ui.theme.Deepseek_impTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,9 +31,13 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
+            val navigationController = rememberNavigationController()
             Deepseek_impTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ChatScreen( modifier = Modifier.padding(innerPadding))
+                    AppNavGraph(
+                        modifier =  Modifier.padding(innerPadding),
+                        navigationController = navigationController
+                    )
                 }
             }
         }

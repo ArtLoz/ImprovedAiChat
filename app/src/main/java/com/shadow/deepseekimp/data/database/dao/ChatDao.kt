@@ -12,6 +12,6 @@ interface ChatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChatMessage(chatDbModel: ChatDbModel)
 
-    @Query("SELECT * FROM chat")
-    suspend fun getAllChatMessages(): List<ChatDbModel>
+    @Query("SELECT * FROM chat WHERE aiModel = :aiModel")
+    suspend fun getAllChatMessages(aiModel:String): List<ChatDbModel>
 }
