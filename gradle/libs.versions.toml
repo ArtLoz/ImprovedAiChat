@@ -51,6 +51,7 @@ androidx-firebase-remoute-config = { group = "com.google.firebase", name = "fire
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
+retrofitConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter"}
 okhttpInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }

@@ -21,7 +21,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"https://api.deepseek.com/\"")
+        buildConfigField("String", "BASE_URL_DEEP", "\"https://api.deepseek.com/\"")
+        buildConfigField("String", "BASE_URL_QWEN", "\"https://dashscope-intl.aliyuncs.com/\"")
     }
 
     buildTypes {
@@ -70,6 +71,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttpInterceptor)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.retrofitConverter)
 
     implementation(platform(libs.androidx.firebase.bom))
     implementation(libs.androidx.firebase.analytics)

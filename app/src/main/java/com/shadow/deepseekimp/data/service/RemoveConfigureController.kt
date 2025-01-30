@@ -1,6 +1,5 @@
-package com.shadow.deepseekimp.data
+package com.shadow.deepseekimp.data.service
 
-import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -17,18 +16,18 @@ class RemoveConfigureController @Inject constructor() {
         setConfigSettingsAsync(configSettings)
     }
 
-    fun fetchAndActivate(onDone: () -> Unit) {
+    fun fetchAndActivate(onDone: (deep:String?, qwen:String?) -> Unit) {
         remoteConfig.fetchAndActivate().addOnSuccessListener {
-            Log.i("RemoveConfigureController", "Remote config fetched and activated")
-            Log.i(
-                "RemoveConfigureController",
-                "Deep seeker config: ${remoteConfig.getString(DEEP_SEEKER_CONFIG)}"
-            )
-            onDone.invoke()
+            val tokenDeep = remoteConfig.getString(DEEP_SEEKER_CONFIG)
+            val tokenQwen = remoteConfig.getString(QWEN_CONFIG)
+            onDone.invoke(tokenDeep, tokenQwen)
+        }.addOnFailureListener {
+            onDone.invoke(null, null)
         }
     }
 
     private companion object {
         const val DEEP_SEEKER_CONFIG = "DEEP_KEY"
+        const val QWEN_CONFIG = "QWEN_KEY"
     }
 }

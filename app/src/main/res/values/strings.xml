@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DeepSeek Improved</string>
+    <string name="chat_selector_choose_chat">Choose your AI chat</string>
+    <string name="chat_selector_by_deepseek">by DeepSeek</string>
+    <string name="chat_selector_one_chat">One time chat</string>
+    <string name="chat_selector_history">History chat</string>
+
+    <string name="chat_screen_hint">Ask your question to DeepSeek AI</string>
 </resources>
