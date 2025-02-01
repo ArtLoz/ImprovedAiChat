@@ -23,11 +23,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -68,19 +74,13 @@ fun ChatScreen(
         )
         ChatComponent(
             modifier = Modifier
-                .padding(horizontal = 14.dp)
-                .padding(bottom = 14.dp)
-                .weight(1f),
-            screenModel = screenModel
-        )
-        ChatInput(
-            modifier = Modifier
-                .padding(horizontal = 14.dp)
-                .fillMaxWidth(),
-            value = screenModel.inputMessage,
+                .padding(horizontal = 14.dp),
+            screenModel = screenModel,
             onValueChange = { viewModel.processIntent(ChatScreenIntent.OnMessageInput(it)) },
-            onSendClick = { viewModel.processIntent(ChatScreenIntent.OnMessageSendClick) }
+            onSendClick = { viewModel.processIntent(ChatScreenIntent.OnMessageSendClick) },
+            animationDone = {viewModel.processIntent(ChatScreenIntent.AnimationDoneMsg(it))}
         )
+
     }
 }
 
@@ -107,7 +107,7 @@ fun ChatBar(
                     ),
                 text = chatName,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
             )
         }
     }
@@ -116,10 +116,14 @@ fun ChatBar(
 @Composable
 fun ChatComponent(
     modifier: Modifier = Modifier,
-    screenModel: ChatScreenModel
+    screenModel: ChatScreenModel,
+    onValueChange :(String) -> Unit,
+    onSendClick: () -> Unit,
+    animationDone: (String) -> Unit
 ) {
     var keyboardHeight by remember { mutableFloatStateOf(0f) }
     var lastCurrentChatItem by remember { mutableIntStateOf(0) }
+    var focusState by remember { mutableStateOf<FocusState?>(null) }
     val lazyScreenState = rememberLazyListState()
     val keyboardHeightCurrent = WindowInsets.ime.getBottom(LocalDensity.current).toFloat()
 
@@ -138,25 +142,46 @@ fun ChatComponent(
 
     LaunchedEffect(keyboardHeightCurrent) {
         val currentKeyboardSize = keyboardHeightCurrent - keyboardHeight
-        if (lazyScreenState.canScrollForward) lazyScreenState.scrollBy(currentKeyboardSize)
+        if (lazyScreenState.canScrollForward && focusState == null) lazyScreenState.scrollBy(currentKeyboardSize)
         keyboardHeight = keyboardHeightCurrent
+        if(keyboardHeightCurrent == 0f){
+            focusState = null
+        }
     }
-    LazyColumn(
-        state = lazyScreenState,
-        modifier = modifier
-    ) {
+    Column(modifier = modifier) {
+        LazyColumn(
+            state = lazyScreenState,
+            modifier = Modifier.weight(1f)
+        ) {
 
-        items(items = screenModel.chatItems, key = { item -> item.id }) { item ->
-            when (item.author) {
-                Author.ME -> ChatUserMessage(message = item.message)
-                Author.BOT -> ChatAiMessage(message = item.message)
-                Author.SYSTEM -> Unit
+            items(items = screenModel.chatItems, key = { item -> item.id }) { item ->
+                when (item.author) {
+                    Author.ME -> ChatUserMessage(message = item.message)
+                    Author.BOT -> ChatAiMessage(message = item.message, showAnimation = !item.alreadyAnimated){
+                        animationDone(item.id)
+                    }
+                    Author.SYSTEM -> Unit
+                }
+            }
+            if (screenModel.botWrite) {
+                item {
+                    ChatAiMessageAnimation()
+                }
             }
         }
-        if (screenModel.botWrite) {
-            item {
-                ChatAiMessageAnimation()
-            }
-        }
+        ChatInput(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focus ->
+                    if(!focus.isFocused){
+                        focusState = focus
+                    }
+                },
+            value = screenModel.inputMessage,
+            onValueChange = onValueChange,
+            onSendClick = onSendClick,
+            lock = screenModel.botWrite
+        )
     }
+
 }

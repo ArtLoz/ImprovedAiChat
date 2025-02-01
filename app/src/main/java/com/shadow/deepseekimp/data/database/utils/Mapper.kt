@@ -49,7 +49,8 @@ fun ChatDbModel.toChatItemModel(): ChatItemModel{
         message = this.message,
         author = ChatDbModel.Role.valueOf(this.role).toAuthor(),
         time = this.timestamp,
-        aiModel = ChatDbModel.AiModelDb.valueOf(this.aiModel).toAiModel()
+        aiModel = ChatDbModel.AiModelDb.valueOf(this.aiModel).toAiModel(),
+        alreadyAnimated = true
     )
 }
 

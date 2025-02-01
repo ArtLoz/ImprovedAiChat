@@ -2,11 +2,13 @@ package com.shadow.deepseekimp.ui.screens.chat
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.shadow.deepseekimp.domain.model.chat.AiAnswerMode
 import com.shadow.deepseekimp.domain.model.chat.AiModel
 import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.domain.usecase.chat.AddChatMessageToHistoryUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.GetHistoryMessageListUseCase
+import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCaseStream
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
@@ -24,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatScreenViewModel @Inject constructor(
     private val sendMessageToAiUseCaseStream: SendMessageToAiUseCaseStream,
+    private val sendMessageToAiUseCase: SendMessageToAiUseCase,
     private val addChatMessageToHistoryUseCase: AddChatMessageToHistoryUseCase,
     private val getHistoryMessageListUseCase: GetHistoryMessageListUseCase
 ) : ViewModel() {
@@ -79,19 +82,59 @@ class ChatScreenViewModel @Inject constructor(
             ChatScreenIntent.OnMessageSendClick -> {
                 io {
                     addMeMessageToChat()
-                    onSendMessageToAi()
+                    when (screenModel.value.aiAnswerMode) {
+                        AiAnswerMode.STREAM -> onSendMessageToAiStream()
+                        AiAnswerMode.MESSAGE -> onSendMessageToAi()
+                    }
+                }
+            }
+
+            is ChatScreenIntent.AnimationDoneMsg -> {
+                _screenModel.update {
+                    it.copy(
+                        chatItems = it.chatItems.map { chatItem ->
+                            if (chatItem.id == intent.id) {
+                                chatItem.copy(alreadyAnimated = true)
+                            } else {
+                                chatItem
+                            }
+                        }
+                    )
                 }
             }
         }
     }
 
     private suspend fun onSendMessageToAi() {
+        _screenModel.update {
+            it.copy(botWrite = true)
+        }
+        when (val useCaseResult = sendMessageToAiUseCase(_screenModel.value.chatItems, aiModel)) {
+            is UseCaseResult.Error -> TODO(useCaseResult.message)
+            is UseCaseResult.Success -> addBotMessageToChat(useCaseResult.model)
+        }
+    }
+
+    private suspend fun addBotMessageToChat(model: ChatItemModel) {
+
+        _screenModel.update {
+            it.copy(
+                chatItems = it.chatItems + listOf(model),
+                botWrite = false
+            )
+        }
+        if (chatType == ChatType.ONE_TIME) return
+        addChatMessageToHistoryUseCase(_screenModel.value.chatItems.last())
+    }
+
+
+    private suspend fun onSendMessageToAiStream() {
         sendMessageToAiUseCaseStream(_screenModel.value.chatItems, aiModel)
             .onStart {
                 _screenModel.update { it.copy(botWrite = true) }
             }
             .onCompletion {
-                if(chatType == ChatType.ONE_TIME) return@onCompletion
+                if (chatType == ChatType.ONE_TIME) return@onCompletion
                 addChatMessageToHistoryUseCase(_screenModel.value.chatItems.last())
             }
             .collect { result ->
@@ -102,13 +145,13 @@ class ChatScreenViewModel @Inject constructor(
                     )
 
                     is UseCaseResult.Success -> {
-                        addBotMessageToChat(result.model)
+                        addBotMessageToChatStream(result.model)
                     }
                 }
             }
     }
 
-    private fun addBotMessageToChat(model: ChatItemModel) {
+    private fun addBotMessageToChatStream(model: ChatItemModel) {
         io {
             _screenModel.update { screenState ->
                 val updatedChatItems = screenState.chatItems.toMutableList().apply {

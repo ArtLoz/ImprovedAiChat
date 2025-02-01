@@ -36,8 +36,23 @@ import kotlinx.coroutines.delay
 fun ChatAiMessage(
     modifier: Modifier = Modifier,
     message: String,
+    showAnimation: Boolean = false,
+    animationDone: () ->Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
+    var displayedMessage by remember { mutableStateOf("") }
+    LaunchedEffect(message) {
+        displayedMessage = ""
+        if (showAnimation) {
+            message.forEach { char ->
+                displayedMessage += char
+                delay(5)
+            }
+            animationDone()
+        } else {
+            displayedMessage = message
+        }
+    }
     Row(
         modifier = modifier
             .padding(vertical = 6.dp)
@@ -50,7 +65,7 @@ fun ChatAiMessage(
         )
         Column(modifier = Modifier.padding(start = 8.dp)) {
             Text(
-                text = message,
+                text = displayedMessage,
                 style = MaterialTheme.typography.bodyMedium
             )
             Row(
@@ -62,7 +77,7 @@ fun ChatAiMessage(
                     modifier = Modifier
                         .size(22.dp)
                         .clickable {
-                          clipboardManager.setText(AnnotatedString( message))
+                            clipboardManager.setText(AnnotatedString(message))
                         },
                     painter = painterResource(R.drawable.ic_copy),
                     contentDescription = null
@@ -114,7 +129,7 @@ fun ChatUserMessage(
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
         horizontalAlignment = Alignment.End

@@ -8,7 +8,8 @@ data class ChatItemModel(
     val message: String,
     val author: Author,
     val time: Long = System.currentTimeMillis(),
-    val aiModel:AiModel
+    val aiModel:AiModel,
+    val alreadyAnimated:Boolean = false
 ) {
 
     companion object {
