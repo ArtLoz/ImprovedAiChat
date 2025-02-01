@@ -3,6 +3,7 @@ package com.shadow.deepseekimp.ui
 import androidx.lifecycle.ViewModel
 import com.shadow.deepseekimp.data.service.RemoveConfigureController
 import com.shadow.deepseekimp.data.datastore.DataStoreHelper
+import com.shadow.deepseekimp.domain.utils.SnackBarService
 import com.shadow.deepseekimp.ui.baseui.io
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,8 +11,13 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val removeConfigureController: RemoveConfigureController,
-    private val dataStoreHelper: DataStoreHelper
+    private val dataStoreHelper: DataStoreHelper,
+    private val snackBarService: SnackBarService
 ) : ViewModel() {
+
+    val snackBarHostState
+        get() = snackBarService.getSnackBarHost()
+
     var loadingRemoteConfig: Boolean = true
 
     init {

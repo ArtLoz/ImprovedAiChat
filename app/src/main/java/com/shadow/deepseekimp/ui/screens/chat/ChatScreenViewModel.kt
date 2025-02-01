@@ -6,10 +6,12 @@ import com.shadow.deepseekimp.domain.model.chat.AiAnswerMode
 import com.shadow.deepseekimp.domain.model.chat.AiModel
 import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
+import com.shadow.deepseekimp.domain.model.snackbar.SnackBarMessage
 import com.shadow.deepseekimp.domain.usecase.chat.AddChatMessageToHistoryUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.GetHistoryMessageListUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCaseStream
+import com.shadow.deepseekimp.domain.utils.SnackBarService
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
@@ -28,7 +30,8 @@ class ChatScreenViewModel @Inject constructor(
     private val sendMessageToAiUseCaseStream: SendMessageToAiUseCaseStream,
     private val sendMessageToAiUseCase: SendMessageToAiUseCase,
     private val addChatMessageToHistoryUseCase: AddChatMessageToHistoryUseCase,
-    private val getHistoryMessageListUseCase: GetHistoryMessageListUseCase
+    private val getHistoryMessageListUseCase: GetHistoryMessageListUseCase,
+    private val snackBarService: SnackBarService
 ) : ViewModel() {
 
     private lateinit var chatType: ChatType
@@ -109,8 +112,14 @@ class ChatScreenViewModel @Inject constructor(
         _screenModel.update {
             it.copy(botWrite = true)
         }
+        snackBarService.showSnackBar(SnackBarMessage.InfoMsg("Sending message to AI"))
         when (val useCaseResult = sendMessageToAiUseCase(_screenModel.value.chatItems, aiModel)) {
-            is UseCaseResult.Error -> TODO(useCaseResult.message)
+            is UseCaseResult.Error -> snackBarService.showSnackBar(
+                SnackBarMessage.ErrorMsg(
+                    useCaseResult.message
+                )
+            )
+
             is UseCaseResult.Success -> addBotMessageToChat(useCaseResult.model)
         }
     }
@@ -139,9 +148,10 @@ class ChatScreenViewModel @Inject constructor(
             }
             .collect { result ->
                 when (result) {
-                    is UseCaseResult.Error -> Log.d(
-                        "ChatScreenViewModel",
-                        "Error: ${result.message}"
+                    is UseCaseResult.Error -> snackBarService.showSnackBar(
+                        SnackBarMessage.ErrorMsg(
+                            result.message
+                        )
                     )
 
                     is UseCaseResult.Success -> {
