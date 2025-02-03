@@ -1,9 +1,13 @@
 package com.shadow.deepseekimp.ui.screens.chat
 
+import android.text.Layout.Alignment
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -15,6 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.shadow.deepseekimp.R
 import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.ui.nav.NavigationController
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
@@ -44,6 +53,7 @@ import com.shadow.deepseekimp.ui.baseui.ChatAiMessage
 import com.shadow.deepseekimp.ui.baseui.ChatAiMessageAnimation
 import com.shadow.deepseekimp.ui.baseui.ChatInput
 import com.shadow.deepseekimp.ui.baseui.ChatUserMessage
+import com.shadow.deepseekimp.ui.baseui.ConfirmDialog
 import com.shadow.deepseekimp.ui.nav.ChatType
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
@@ -57,9 +67,10 @@ fun ChatScreen(
     navigationController: NavigationController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    animationKey:String
+    animationKey: String
 ) {
     val screenModel = viewModel.screenModel.collectAsState().value
+    val showClearDialog = remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .imePadding()
@@ -70,7 +81,10 @@ fun ChatScreen(
             chatName = stringResource(chatType.value),
             animatedVisibilityScope = animatedVisibilityScope,
             sharedTransitionScope = sharedTransitionScope,
-            animationKey = animationKey
+            animationKey = animationKey,
+            onCloseClick = if (chatType == ChatType.HISTORY) {
+                { showClearDialog.value = true }
+            } else null
         )
         ChatComponent(
             modifier = Modifier
@@ -78,10 +92,20 @@ fun ChatScreen(
             screenModel = screenModel,
             onValueChange = { viewModel.processIntent(ChatScreenIntent.OnMessageInput(it)) },
             onSendClick = { viewModel.processIntent(ChatScreenIntent.OnMessageSendClick) },
-            animationDone = {viewModel.processIntent(ChatScreenIntent.AnimationDoneMsg(it))}
+            animationDone = { viewModel.processIntent(ChatScreenIntent.AnimationDoneMsg(it)) }
         )
 
     }
+    AnimatedVisibility(
+        visible = showClearDialog.value,
+    ) {
+        ConfirmDialog(
+            onDismissRequest = { showClearDialog.value = false },
+            dialogText = stringResource(R.string.chat_history_clear),
+            onConfirm = viewModel::clearHistory
+        )
+    }
+
 }
 
 @Composable
@@ -90,26 +114,42 @@ fun ChatBar(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     chatName: String,
-    animationKey: String
+    animationKey: String,
+    onCloseClick: (() -> Unit)? = null
 ) {
     with(sharedTransitionScope) {
-        Row(
+        Box(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(8.dp)
+                .padding(8.dp),
+            contentAlignment = androidx.compose.ui.Alignment.TopCenter
         ) {
-            Text(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .sharedBounds(
-                        sharedContentState = rememberSharedContentState(animationKey),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                    ),
-                text = chatName,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-            )
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .sharedBounds(
+                            sharedContentState = rememberSharedContentState(animationKey),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                        ),
+                    text = chatName,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                )
+            }
+            onCloseClick?.let {
+                Icon(
+                    modifier = Modifier
+                        .align(androidx.compose.ui.Alignment.CenterEnd)
+                        .clickable(onClick = onCloseClick),
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null
+                )
+            }
         }
+
     }
 }
 
@@ -117,7 +157,7 @@ fun ChatBar(
 fun ChatComponent(
     modifier: Modifier = Modifier,
     screenModel: ChatScreenModel,
-    onValueChange :(String) -> Unit,
+    onValueChange: (String) -> Unit,
     onSendClick: () -> Unit,
     animationDone: (String) -> Unit
 ) {
@@ -134,7 +174,7 @@ fun ChatComponent(
         if (lazyScreenState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == screenModel.chatItems.lastIndex) {
             lazyScreenState.scrollToItem(lazyScreenState.layoutInfo.totalItemsCount)
         }
-        if(screenModel.chatItems.size - lastCurrentChatItem > 2){
+        if (screenModel.chatItems.size - lastCurrentChatItem > 2) {
             lazyScreenState.scrollToItem(screenModel.chatItems.size)
         }
         lastCurrentChatItem = screenModel.chatItems.size
@@ -142,9 +182,11 @@ fun ChatComponent(
 
     LaunchedEffect(keyboardHeightCurrent) {
         val currentKeyboardSize = keyboardHeightCurrent - keyboardHeight
-        if (lazyScreenState.canScrollForward && focusState == null) lazyScreenState.scrollBy(currentKeyboardSize)
+        if (lazyScreenState.canScrollForward && focusState == null) lazyScreenState.scrollBy(
+            currentKeyboardSize
+        )
         keyboardHeight = keyboardHeightCurrent
-        if(keyboardHeightCurrent == 0f){
+        if (keyboardHeightCurrent == 0f) {
             focusState = null
         }
     }
@@ -157,9 +199,13 @@ fun ChatComponent(
             items(items = screenModel.chatItems, key = { item -> item.id }) { item ->
                 when (item.author) {
                     Author.ME -> ChatUserMessage(message = item.message)
-                    Author.BOT -> ChatAiMessage(message = item.message, showAnimation = !item.alreadyAnimated){
+                    Author.BOT -> ChatAiMessage(
+                        message = item.message,
+                        showAnimation = !item.alreadyAnimated
+                    ) {
                         animationDone(item.id)
                     }
+
                     Author.SYSTEM -> Unit
                 }
             }
@@ -173,7 +219,7 @@ fun ChatComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focus ->
-                    if(!focus.isFocused){
+                    if (!focus.isFocused) {
                         focusState = focus
                     }
                 },

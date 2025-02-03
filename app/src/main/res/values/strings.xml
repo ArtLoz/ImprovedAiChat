@@ -6,4 +6,9 @@
     <string name="chat_selector_history">History chat</string>
 
     <string name="chat_screen_hint">Ask your question to DeepSeek AI</string>
+    <string name="chat_history_clear">Are you sure you want to clear the chat history?</string>
+
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+
 </resources>

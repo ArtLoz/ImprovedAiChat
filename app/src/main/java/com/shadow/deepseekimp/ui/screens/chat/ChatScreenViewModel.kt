@@ -8,6 +8,7 @@ import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.domain.model.snackbar.SnackBarMessage
 import com.shadow.deepseekimp.domain.usecase.chat.AddChatMessageToHistoryUseCase
+import com.shadow.deepseekimp.domain.usecase.chat.ClearHistoryChatUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.GetHistoryMessageListUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCaseStream
@@ -31,6 +32,7 @@ class ChatScreenViewModel @Inject constructor(
     private val sendMessageToAiUseCase: SendMessageToAiUseCase,
     private val addChatMessageToHistoryUseCase: AddChatMessageToHistoryUseCase,
     private val getHistoryMessageListUseCase: GetHistoryMessageListUseCase,
+    private val clearHistoryChatUseCase: ClearHistoryChatUseCase,
     private val snackBarService: SnackBarService
 ) : ViewModel() {
 
@@ -41,16 +43,17 @@ class ChatScreenViewModel @Inject constructor(
     val screenModel = _screenModel.asStateFlow()
 
     fun setupChatType(type: ChatType) {
-        chatType = type
-        aiModel = AiModel.DEEEP_SEEK
-        addAiChatPrompt()
+        io{
+            chatType = type
+            aiModel = AiModel.DEEEP_SEEK
+            addAiChatPrompt()
+        }
     }
 
-    private fun addAiChatPrompt() {
-        io {
+    private suspend fun addAiChatPrompt() {
             _screenModel.update {
                 it.copy(
-                    chatItems = it.chatItems + listOf(
+                    chatItems = listOf(
                         ChatItemModel(
                             message = "You are a helpful assistant.",
                             author = Author.SYSTEM,
@@ -59,7 +62,7 @@ class ChatScreenViewModel @Inject constructor(
                     )
                 )
             }
-            if (chatType == ChatType.ONE_TIME) return@io
+            if (chatType == ChatType.ONE_TIME) return
             when (val useCaseResult = getHistoryMessageListUseCase(aiModel)) {
                 is UseCaseResult.Error -> Unit
                 is UseCaseResult.Success -> {
@@ -70,8 +73,6 @@ class ChatScreenViewModel @Inject constructor(
                     }
                 }
             }
-        }
-
     }
 
     fun processIntent(intent: ChatScreenIntent) {
@@ -140,7 +141,6 @@ class ChatScreenViewModel @Inject constructor(
         addChatMessageToHistoryUseCase(_screenModel.value.chatItems.last())
     }
 
-
     private suspend fun onSendMessageToAiStream() {
         sendMessageToAiUseCaseStream(_screenModel.value.chatItems, aiModel)
             .onStart {
@@ -202,5 +202,12 @@ class ChatScreenViewModel @Inject constructor(
         if (chatType == ChatType.ONE_TIME) return
         addChatMessageToHistoryUseCase(model)
 
+    }
+
+    fun clearHistory() {
+        io {
+            clearHistoryChatUseCase(aiModel)
+            addAiChatPrompt()
+        }
     }
 }

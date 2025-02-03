@@ -85,7 +85,6 @@ class ChatRepository @Inject constructor(
             ?: throw Exception("Response choices is null")
     }
 
-
     fun sendMessageToAiQwenStream(listMessage: List<ChatItemModel>): Flow<ChatItemModel> {
         return flow {
             val request = QwenChatRequestDto(
@@ -125,5 +124,9 @@ class ChatRepository @Inject constructor(
 
     suspend fun getChatHistory(aiModel: AiModel):List<ChatItemModel>{
         return chatDao.getAllChatMessages(aiModel = aiModel.toAiDbModel().name).map { it.toChatItemModel() }
+    }
+
+    suspend fun clearChatHistory(aiModel: AiModel){
+        chatDao.deleteChatMessageByAiModel(aiModel.toAiDbModel().name)
     }
 }
