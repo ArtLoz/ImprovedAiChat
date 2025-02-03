@@ -112,13 +112,17 @@ class ChatScreenViewModel @Inject constructor(
         _screenModel.update {
             it.copy(botWrite = true)
         }
-        snackBarService.showSnackBar(SnackBarMessage.InfoMsg("Sending message to AI"))
         when (val useCaseResult = sendMessageToAiUseCase(_screenModel.value.chatItems, aiModel)) {
-            is UseCaseResult.Error -> snackBarService.showSnackBar(
-                SnackBarMessage.ErrorMsg(
-                    useCaseResult.message
+            is UseCaseResult.Error -> {
+                _screenModel.update {
+                    it.copy(botWrite = false)
+                }
+                snackBarService.showSnackBar(
+                    SnackBarMessage.ErrorMsg(
+                        useCaseResult.message
+                    )
                 )
-            )
+            }
 
             is UseCaseResult.Success -> addBotMessageToChat(useCaseResult.model)
         }
@@ -148,11 +152,14 @@ class ChatScreenViewModel @Inject constructor(
             }
             .collect { result ->
                 when (result) {
-                    is UseCaseResult.Error -> snackBarService.showSnackBar(
-                        SnackBarMessage.ErrorMsg(
-                            result.message
+                    is UseCaseResult.Error -> {
+                        _screenModel.update { it.copy(botWrite = false) }
+                        snackBarService.showSnackBar(
+                            SnackBarMessage.ErrorMsg(
+                                result.message
+                            )
                         )
-                    )
+                    }
 
                     is UseCaseResult.Success -> {
                         addBotMessageToChatStream(result.model)
