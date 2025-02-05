@@ -85,6 +85,7 @@ class ChatScreenViewModel @Inject constructor(
 
             ChatScreenIntent.OnMessageSendClick -> {
                 io {
+                    if(_screenModel.value.inputMessage.isEmpty()) return@io
                     addMeMessageToChat()
                     when (screenModel.value.aiAnswerMode) {
                         AiAnswerMode.STREAM -> onSendMessageToAiStream()
