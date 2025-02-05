@@ -30,7 +30,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navigationController = rememberNavigationController()
-            Deepseek_impTheme {
+            Deepseek_impTheme(
+                darkTheme = true
+            ) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(viewModel.snackBarHostState) }
