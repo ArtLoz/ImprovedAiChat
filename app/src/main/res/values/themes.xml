@@ -3,7 +3,7 @@
 
     <style name="Theme.Deepseek_imp" parent="android:Theme.Material.Light.NoActionBar" />
     <style name="Theme.Vixacare.StartingScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_deepseek_splash</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_svg</item>
         <item name="postSplashScreenTheme">@style/Theme.Deepseek_imp</item>
     </style>
 </resources>
