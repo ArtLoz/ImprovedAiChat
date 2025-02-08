@@ -35,11 +35,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api")
@@ -51,44 +51,15 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.navigation)
-    implementation(libs.kotlinx.serialization)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.okhttpInterceptor)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.retrofitConverter)
-
     implementation(platform(libs.androidx.firebase.bom))
-    implementation(libs.androidx.firebase.analytics)
-    implementation(libs.androidx.firebase.crashlytics)
-    implementation(libs.androidx.firebase.remoute.config)
-
-    implementation(libs.room)
-    implementation(libs.roomKtx)
-    implementation(libs.dataStore)
-    ksp(libs.roomCompiler)
-
-    implementation(libs.hiltdagger)
-    implementation(libs.navigationComposeHilt)
-    ksp(libs.hiltdaggerCompiler)
-
-    implementation(libs.core.splashscreen)
+    implementation(platform(libs.androidx.compose.bom))
+    ksp(libs.bundles.kspBundles)
+    implementation(libs.bundles.hilt)
+    implementation(libs.bundles.firebase)
+    implementation(libs.bundles.storage)
+    implementation(libs.bundles.network)
+    implementation(libs.bundles.ui)
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.test)
 }
