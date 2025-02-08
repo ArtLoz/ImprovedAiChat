@@ -1,7 +1,5 @@
 package com.shadow.deepseekimp.ui.screens.chat
 
-import android.text.Layout.Alignment
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
@@ -22,7 +20,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,38 +34,69 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shadow.deepseekimp.R
+import com.shadow.deepseekimp.domain.model.chat.AiModel
 import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.ui.nav.NavigationController
-import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.ui.baseui.ChatAiMessage
 import com.shadow.deepseekimp.ui.baseui.ChatAiMessageAnimation
 import com.shadow.deepseekimp.ui.baseui.ChatInput
 import com.shadow.deepseekimp.ui.baseui.ChatUserMessage
 import com.shadow.deepseekimp.ui.baseui.ConfirmDialog
-import com.shadow.deepseekimp.ui.nav.ChatType
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenIntent
 import com.shadow.deepseekimp.ui.screens.chat.model.ChatScreenModel
 import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_HISTORY
+import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_ONE
 
 @Composable
-fun ChatScreen(
+fun OneTimeChatScreen(
     modifier: Modifier = Modifier,
-    viewModel: ChatScreenViewModel = hiltViewModel(),
-    chatType: ChatType,
+    viewModel: OneTimeChatScreenViewModel = hiltViewModel(),
     navigationController: NavigationController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    animationKey: String
 ) {
+    val screenModel = viewModel.screenModel.collectAsState().value
+    Column(
+        modifier = modifier
+            .imePadding()
+            .fillMaxHeight()
+    ) {
+        LaunchedEffect(Unit) { viewModel.setupChat(AiModel.DEEEP_SEEK) }
+        ChatBar(
+            chatName = stringResource(R.string.chat_selector_one_chat),
+            animatedVisibilityScope = animatedVisibilityScope,
+            sharedTransitionScope = sharedTransitionScope,
+            animationKey = SHARED_TITLE_KEY_ONE,
+            onCloseClick = null
+        )
+        ChatComponent(
+            modifier = Modifier
+                .padding(horizontal = 14.dp),
+            screenModel = screenModel,
+            onValueChange = { viewModel.processIntent(ChatScreenIntent.OnMessageInput(it)) },
+            onSendClick = { viewModel.processIntent(ChatScreenIntent.OnMessageSendClick) },
+            animationDone = { viewModel.processIntent(ChatScreenIntent.AnimationDoneMsg(it)) }
+        )
+
+    }
+}
+
+@Composable
+fun HistoryChatScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HistoryChatScreenViewModel = hiltViewModel(),
+    navigationController: NavigationController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+) {
+
     val screenModel = viewModel.screenModel.collectAsState().value
     val showClearDialog = remember { mutableStateOf(false) }
     Column(
@@ -76,15 +104,13 @@ fun ChatScreen(
             .imePadding()
             .fillMaxHeight()
     ) {
-        LaunchedEffect(Unit) { viewModel.setupChatType(chatType) }
+        LaunchedEffect(Unit) { viewModel.setupChat(model = AiModel.DEEEP_SEEK) }
         ChatBar(
-            chatName = stringResource(chatType.value),
+            chatName = stringResource(R.string.chat_selector_history),
             animatedVisibilityScope = animatedVisibilityScope,
             sharedTransitionScope = sharedTransitionScope,
-            animationKey = animationKey,
-            onCloseClick = if (chatType == ChatType.HISTORY) {
-                { showClearDialog.value = true }
-            } else null
+            animationKey = SHARED_TITLE_KEY_HISTORY,
+            onCloseClick = { showClearDialog.value = true }
         )
         ChatComponent(
             modifier = Modifier

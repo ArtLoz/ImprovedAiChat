@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.shadow.deepseekimp.ui.screens.chatselector.ScreenChatSelector
-import com.shadow.deepseekimp.ui.screens.chat.ChatScreen
+import com.shadow.deepseekimp.ui.screens.chat.HistoryChatScreen
+import com.shadow.deepseekimp.ui.screens.chat.OneTimeChatScreen
 
 @Composable
 fun AppNavGraph(
@@ -27,13 +27,18 @@ fun AppNavGraph(
                     animatedVisibilityScope = this
                 )
             }
-            composable<NavScreens.ChatScreen> {
-                ChatScreen(
+            composable<NavScreens.HistoryChatScreen> {
+                HistoryChatScreen(
                     navigationController = navigationController,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this,
-                    chatType = ChatType.valueOf(it.toRoute<NavScreens.ChatScreen>().chadTypeString),
-                    animationKey = it.toRoute<NavScreens.ChatScreen>().animationKey
+                )
+            }
+            composable<NavScreens.OneTimeChatScreen> {
+                OneTimeChatScreen(
+                    navigationController = navigationController,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this,
                 )
             }
         }

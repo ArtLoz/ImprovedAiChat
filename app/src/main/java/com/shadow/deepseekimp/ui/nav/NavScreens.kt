@@ -1,6 +1,5 @@
 package com.shadow.deepseekimp.ui.nav
 
-import com.shadow.deepseekimp.R
 import kotlinx.serialization.Serializable
 
 sealed class NavScreens {
@@ -9,14 +8,7 @@ sealed class NavScreens {
     data object SelectorChatScreen : NavScreens()
 
     @Serializable
-    data class ChatScreen(
-        val chadTypeString: String,
-        val animationKey:String
-    ) : NavScreens()
-}
-
-@Serializable
-enum class ChatType(val value:Int){
-    ONE_TIME(R.string.chat_selector_one_chat),
-    HISTORY(R.string.chat_selector_history)
+    data object HistoryChatScreen : NavScreens()
+    @Serializable
+    data object OneTimeChatScreen : NavScreens()
 }

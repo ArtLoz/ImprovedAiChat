@@ -5,6 +5,7 @@ import com.shadow.deepseekimp.data.repository.ChatRepository
 import com.shadow.deepseekimp.domain.model.chat.AiModel
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class SendMessageToAiUseCase @Inject constructor(

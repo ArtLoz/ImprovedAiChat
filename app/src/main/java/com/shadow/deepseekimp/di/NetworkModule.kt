@@ -1,14 +1,11 @@
 package com.shadow.deepseekimp.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.shadow.deepseekimp.BuildConfig
 import com.shadow.deepseekimp.data.network.utils.AddHeaderTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,9 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-
-    private val networkJson = Json { ignoreUnknownKeys = true }
-
 
     @Provides
     @Singleton

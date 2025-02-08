@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.shadow.deepseekimp.ui.nav.ChatType
 import com.shadow.deepseekimp.ui.nav.NavScreens
 import com.shadow.deepseekimp.ui.nav.NavigationController
 import com.shadow.deepseekimp.R
@@ -93,7 +92,7 @@ fun ScreenChatSelector(
                         ),
                         buttonText = stringResource(R.string.chat_selector_one_chat)
                     ) {
-                        navigationController.navigate(NavScreens.ChatScreen(ChatType.ONE_TIME.name, SHARED_TITLE_KEY_ONE))
+                        navigationController.navigate(NavScreens.OneTimeChatScreen)
                     }
                 MainButtonOutlined(
                     modifier.sharedBounds(
@@ -102,7 +101,7 @@ fun ScreenChatSelector(
                     ),
                     buttonText = stringResource(R.string.chat_selector_history)
                 ) {
-                    navigationController.navigate(NavScreens.ChatScreen(ChatType.HISTORY.name, SHARED_TITLE_KEY_HISTORY))
+                    navigationController.navigate(NavScreens.HistoryChatScreen)
                 }
                 }
             }
