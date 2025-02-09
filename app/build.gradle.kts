@@ -21,6 +21,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", "\"https://api.deepseek.com/\"")
     }
 
     buildTypes {
@@ -41,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -67,6 +69,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okhttp)
     implementation(libs.okhttpInterceptor)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     implementation(platform(libs.androidx.firebase.bom))
     implementation(libs.androidx.firebase.analytics)
@@ -81,4 +84,6 @@ dependencies {
     implementation(libs.hiltdagger)
     implementation(libs.navigationComposeHilt)
     ksp(libs.hiltdaggerCompiler)
+
+    implementation(libs.core.splashscreen)
 }
