@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "deepseek_imp"
+rootProject.name = "Improveded Ai Chat"
 include(":app")
  
