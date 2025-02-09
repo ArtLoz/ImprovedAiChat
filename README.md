@@ -1,4 +1,4 @@
-# AI Chat
+# Improved AI Chat
 
 AI Chat is an Android application for chatting with various AI models. Currently, it supports DeepSeek and Qwen Max.
 
