@@ -68,7 +68,6 @@ fun OneTimeChatScreen(
             .imePadding()
             .fillMaxHeight()
     ) {
-        LaunchedEffect(Unit) { viewModel.setupChat(AiModel.DEEEP_SEEK) }
         ChatBar(
             chatName = stringResource(R.string.chat_selector_one_chat),
             animatedVisibilityScope = animatedVisibilityScope,
@@ -104,7 +103,6 @@ fun HistoryChatScreen(
             .imePadding()
             .fillMaxHeight()
     ) {
-        LaunchedEffect(Unit) { viewModel.setupChat(model = AiModel.DEEEP_SEEK) }
         ChatBar(
             chatName = stringResource(R.string.chat_selector_history),
             animatedVisibilityScope = animatedVisibilityScope,

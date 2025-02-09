@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Improved AI Chat</string>
     <string name="chat_selector_choose_chat">Choose your AI chat</string>
-    <string name="chat_selector_by_deepseek">by DeepSeek</string>
+    <string name="chat_selector_by_model">by %s</string>
     <string name="chat_selector_one_chat">One time chat</string>
     <string name="chat_selector_history">History chat</string>
 
@@ -10,5 +10,8 @@
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+
+    <string name="aiModel_deep_seek">DeepSeek R1</string>
+    <string name="aiModel_qwen_max">Qwen Max</string>
 
 </resources>

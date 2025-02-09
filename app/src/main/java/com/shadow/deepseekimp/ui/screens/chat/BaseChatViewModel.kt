@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 abstract class BaseChatViewModel : ViewModel() {
     protected lateinit var aiModel: AiModel
 
-    abstract fun setupChat(model: AiModel)
     protected fun addAiChatPrompt() {
         _screenModel.update {
             it.copy(

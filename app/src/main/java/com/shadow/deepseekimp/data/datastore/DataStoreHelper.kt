@@ -12,7 +12,6 @@ class DataStoreHelper @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
 
-
     suspend fun setTokenForDeepSeek(token: String) {
         dataStore.edit { preferences ->
             preferences[AUTH_TOKEN_DEEP] = token
@@ -37,8 +36,21 @@ class DataStoreHelper @Inject constructor(
         }.firstOrNull()
     }
 
+    suspend fun getAiModel(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[AI_MODEL]
+        }.firstOrNull()
+    }
+
+    suspend fun setAiModel(aiModel: String) {
+        dataStore.edit { preferences ->
+            preferences[AI_MODEL] = aiModel
+        }
+    }
+
     private companion object {
         val AUTH_TOKEN_DEEP = stringPreferencesKey("auth_token")
         val QWEN_AUTH_TOKEN = stringPreferencesKey("qwen_auth_token")
+        val AI_MODEL = stringPreferencesKey("ai_model")
     }
 }

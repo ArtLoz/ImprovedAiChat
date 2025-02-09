@@ -9,16 +9,13 @@ import com.shadow.deepseekimp.domain.model.chat.Author
 import com.shadow.deepseekimp.domain.model.chat.ChatItemModel
 import com.shadow.deepseekimp.domain.model.snackbar.SnackBarMessage
 import com.shadow.deepseekimp.domain.usecase.chat.AddChatMessageToHistoryUseCase
-import com.shadow.deepseekimp.domain.usecase.chat.ClearHistoryChatUseCase
-import com.shadow.deepseekimp.domain.usecase.chat.GetHistoryMessageListUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.SendMessageToAiUseCaseStream
+import com.shadow.deepseekimp.domain.usecase.chatselector.GetCurrentAiModelUseCase
 import com.shadow.deepseekimp.domain.utils.SnackBarService
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import com.shadow.deepseekimp.ui.baseui.io
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
@@ -29,6 +26,7 @@ class OneTimeChatScreenViewModel @Inject constructor(
     private val sendMessageToAiUseCaseStream: SendMessageToAiUseCaseStream,
     private val sendMessageToAiUseCase: SendMessageToAiUseCase,
     private val addChatMessageToHistoryUseCase: AddChatMessageToHistoryUseCase,
+    private val getCurrentAiModelUseCase: GetCurrentAiModelUseCase,
     private val snackBarService: SnackBarService,
 ) : BaseChatViewModel() {
 
@@ -58,11 +56,23 @@ class OneTimeChatScreenViewModel @Inject constructor(
             }
     }
 
-    override fun setupChat(model: AiModel) {
-        aiModel = model
-        addAiChatPrompt()
-    }
+    init {
+        io{
+            aiModel = when(val result = getCurrentAiModelUseCase()){
+                is UseCaseResult.Success -> {
+                    result.model
+                }
 
+                is UseCaseResult.Error -> {
+                    AiModel.DEEEP_SEEK
+
+                }
+            }
+            addAiChatPrompt()
+
+        }
+
+    }
     override suspend fun onSendMessageTooAi() {
         _screenModel.update {
             it.copy(botWrite = true)

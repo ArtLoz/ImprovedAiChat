@@ -6,6 +6,7 @@ import com.shadow.deepseekimp.domain.model.snackbar.SnackBarMessage
 import com.shadow.deepseekimp.domain.usecase.chat.AddChatMessageToHistoryUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.ClearHistoryChatUseCase
 import com.shadow.deepseekimp.domain.usecase.chat.GetHistoryMessageListUseCase
+import com.shadow.deepseekimp.domain.usecase.chatselector.GetCurrentAiModelUseCase
 import com.shadow.deepseekimp.domain.utils.SnackBarService
 import com.shadow.deepseekimp.domain.utils.UseCaseResult
 import com.shadow.deepseekimp.domain.utils.WorkerResult
@@ -22,18 +23,29 @@ class HistoryChatScreenViewModel @Inject constructor(
     private val snackBarService: SnackBarService,
     private val workerController: WorkerController,
     private val addChatMessageToHistoryUseCase: AddChatMessageToHistoryUseCase,
+    private val getCurrentAiModelUseCase: GetCurrentAiModelUseCase
 ) : BaseChatViewModel() {
 
-    override fun setupChat(model: AiModel) {
-        io {
-            aiModel = model
+    init {
+        io{
+            aiModel = when(val result = getCurrentAiModelUseCase()){
+                is UseCaseResult.Success -> {
+                    result.model
+                }
+
+                is UseCaseResult.Error -> {
+                    AiModel.DEEEP_SEEK
+
+                }
+            }
             addAiChatPrompt()
             loadChatHistory()
             collectStatusWorker()
             collectInfoFromWorker()
-        }
-    }
 
+        }
+
+    }
     private suspend fun loadChatHistory() {
         when (val useCaseResult = getHistoryMessageListUseCase(aiModel)) {
             is UseCaseResult.Error -> Unit
