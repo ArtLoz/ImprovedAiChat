@@ -61,5 +61,6 @@ dependencies {
     implementation(libs.bundles.network)
     implementation(libs.bundles.ui)
     implementation(libs.bundles.core)
+    implementation(libs.bundles.markdown)
     implementation(libs.bundles.test)
 }

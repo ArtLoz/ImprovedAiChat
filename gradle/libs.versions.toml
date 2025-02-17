@@ -26,6 +26,7 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 core-splashscreen = "1.0.1"
 workManager = "2.10.0"
 hiltWork = "1.2.0"
+markdown = "0.30.0"
 
 [libraries]
 #core
@@ -65,6 +66,9 @@ room = { group = "androidx.room", name = "room-runtime", version.ref = "roomVers
 roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 dataStore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStoreVersion" }
+#Markdonw
+markdown-render = { group = "com.mikepenz", name = "multiplatform-markdown-renderer-m3", version.ref = "markdown" }
+markdown-render-code = { group = "com.mikepenz", name = "multiplatform-markdown-renderer-code", version.ref = "markdown" }
 
 #test
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
@@ -116,6 +120,10 @@ core = [
     "androidx-activity-compose",
     "androidx-workmanager-corutines",
     "core-splashscreen"
+]
+markdown = [
+    "markdown-render",
+    "markdown-render-code"
 ]
 test = [
     "androidx-ui-test-manifest",
