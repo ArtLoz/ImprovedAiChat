@@ -53,14 +53,14 @@ fun ChatAiMessage(
             displayedMessage = message
         }
     }
-    Row(
+    Column(
         modifier = modifier
             .padding(vertical = 6.dp)
             .fillMaxWidth(0.8f)
     ) {
         Icon(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(R.drawable.ic_deepseek),
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(R.drawable.ic_logo_svg),
             contentDescription = null
         )
         Column(modifier = Modifier.padding(start = 8.dp)) {
@@ -109,8 +109,8 @@ fun ChatAiMessageAnimation(
             .fillMaxWidth()
     ) {
         Icon(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(R.drawable.ic_deepseek),
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(R.drawable.ic_logo_svg),
             contentDescription = null
         )
         Column(modifier = Modifier.padding(start = 8.dp)) {

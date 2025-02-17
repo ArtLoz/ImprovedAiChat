@@ -100,7 +100,7 @@ fun ScreenChatSelector(
                 ) {
                     Image(
                         modifier = Modifier.size(24.dp),
-                        painter = painterResource(R.drawable.ic_deepseek),
+                        painter = painterResource(screenModel.currentAiModel.valueIcon),
                         contentDescription = null,
                     )
                     Text(
