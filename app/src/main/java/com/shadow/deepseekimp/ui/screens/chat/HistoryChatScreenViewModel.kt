@@ -96,7 +96,7 @@ class HistoryChatScreenViewModel @Inject constructor(
     }
 
     override suspend fun onSendMessageTooAi() {
-        workerController.runSendWorkerApiRequest(_screenModel.value.chatItems, aiModel)
+        workerController.runSendWorkerApiRequest(aiModel)
     }
 
     override suspend fun addMeMessageToChat() {

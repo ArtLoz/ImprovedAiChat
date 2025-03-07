@@ -77,12 +77,11 @@ class WorkerController @Inject constructor(
     }
 
     fun runSendWorkerApiRequest(
-        listMessage: List<ChatItemModel>,
         model: AiModel,
     ) {
         if (currentWorkerState.value) return
         val requestData =
-            HistoryWorkerSender.getWorkerRequestData(HistoryWorkerRequest(listMessage, model))
+            HistoryWorkerSender.getWorkerRequestData(HistoryWorkerRequest(model))
         val worker = OneTimeWorkRequestBuilder<HistoryWorkerSender>()
             .addTag(HISTORY_WORKER_NAME)
             .setInputData(workDataOf(HistoryWorkerSender.REQUEST_KEY to requestData))
