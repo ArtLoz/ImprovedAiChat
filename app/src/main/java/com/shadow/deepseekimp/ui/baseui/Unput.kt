@@ -70,7 +70,7 @@ fun ChatInput(
                             indication = null
                         ),
                     imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.cd_button_send_msg)
                 )
             }
         },

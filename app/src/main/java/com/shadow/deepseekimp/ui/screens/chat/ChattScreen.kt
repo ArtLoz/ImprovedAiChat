@@ -184,7 +184,7 @@ fun ChatBar(
                         .align(androidx.compose.ui.Alignment.CenterEnd)
                         .clickable(onClick = onCloseClick),
                     imageVector = Icons.Default.Clear,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.cd_button_clear_chat)
                 )
             }
         }

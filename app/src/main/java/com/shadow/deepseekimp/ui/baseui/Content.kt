@@ -44,7 +44,7 @@ fun AiModelUi(
         modifier = Modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable { onElementClick(aiModel) }
-            .padding(horizontal = 14.dp, vertical = 8.dp),
+            .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
