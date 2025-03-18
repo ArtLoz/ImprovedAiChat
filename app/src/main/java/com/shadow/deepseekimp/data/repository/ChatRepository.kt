@@ -27,9 +27,10 @@ class ChatRepository @Inject constructor(
     private val chatApi: ChatApi
 ) {
 
-    suspend fun sendMessageToAiDeep(listMessage: List<ChatItemModel>): ChatItemModel {
+    suspend fun sendMessageToAiDeep(listMessage: List<ChatItemModel>, deepModel: AiModel): ChatItemModel {
         val request = DeepSeekChatRequestDto(
             messages = listMessage.map { it.toMessageDeepDto() },
+            model = deepModel.modelApiName,
             stream = false
         )
         val response = chatApi.sendMessageToDeepSeek(request)
@@ -73,15 +74,16 @@ class ChatRepository @Inject constructor(
         }
     }
 
-    suspend fun sendMessageToAiQwen(listMessage: List<ChatItemModel>): ChatItemModel {
+    suspend fun sendMessageToAiQwen(listMessage: List<ChatItemModel>, qwenModel: AiModel): ChatItemModel {
         val request = QwenChatRequestDto(
             messages = listMessage.map { it.toMessageQwenDto() },
+            model = qwenModel.modelApiName,
             stream = false
         )
         val response = chatApi.sendMessageToQwen(request)
         if (!response.isSuccessful) throw Exception("Response is not successful")
         val body = response.body() ?: throw Exception("Response body is null")
-        return body.choices.firstOrNull()?.qwenMessageDto?.toChatItemModel(body.id)
+        return body.choices.firstOrNull()?.qwenMessageDto?.toChatItemModel(body.id, qwenModel)
             ?: throw Exception("Response choices is null")
     }
 

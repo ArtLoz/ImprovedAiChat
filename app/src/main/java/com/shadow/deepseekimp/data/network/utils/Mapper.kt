@@ -32,13 +32,13 @@ fun DeepSeekMessageDto.toChatItemModel(id:String): ChatItemModel {
     )
 }
 
-fun QwenMessageDto.toChatItemModel(id:String): ChatItemModel {
+fun QwenMessageDto.toChatItemModel(id:String, aiModel: AiModel): ChatItemModel {
     return ChatItemModel(
         id = id,
         message = content,
         author = Author.fromValue(role)
             ?: throw IllegalArgumentException("Unknown author"),
-        aiModel = AiModel.QWEN_MAX
+        aiModel = aiModel
     )
 }
 

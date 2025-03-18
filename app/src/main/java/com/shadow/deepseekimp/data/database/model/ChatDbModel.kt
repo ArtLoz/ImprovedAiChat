@@ -18,6 +18,6 @@ data class ChatDbModel(
     }
 
     enum class AiModelDb {
-        QWEEN, DEEPSEEK
+        QWEEN, DEEPSEEK, QWEN_PLUS
     }
 }

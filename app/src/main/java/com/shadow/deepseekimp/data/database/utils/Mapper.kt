@@ -34,6 +34,7 @@ fun AiModel.toAiDbModel(): ChatDbModel.AiModelDb{
     return when(this){
         AiModel.DEEEP_SEEK -> ChatDbModel.AiModelDb.DEEPSEEK
         AiModel.QWEN_MAX -> ChatDbModel.AiModelDb.QWEEN
+        AiModel.QWEN_PLUS -> ChatDbModel.AiModelDb.QWEN_PLUS
     }
 }
 
@@ -41,6 +42,7 @@ fun ChatDbModel.AiModelDb.toAiModel(): AiModel{
     return when(this){
         ChatDbModel.AiModelDb.DEEPSEEK -> AiModel.DEEEP_SEEK
         ChatDbModel.AiModelDb.QWEEN -> AiModel.QWEN_MAX
+        ChatDbModel.AiModelDb.QWEN_PLUS -> AiModel.QWEN_PLUS
     }
 }
 

@@ -13,6 +13,7 @@
 
     <string name="aiModel_deep_seek">DeepSeek R1</string>
     <string name="aiModel_qwen_max">Qwen Max</string>
+    <string name="aiModel_qwen_plus">Qwen Plus</string>
 
     <string name="cd_button_clear_chat">Button cleat history chat</string>
     <string name="cd_button_send_msg">Button send chat message</string>

@@ -18,8 +18,8 @@ class SendMessageToAiUseCase @Inject constructor(
     ): UseCaseResult<ChatItemModel> {
         return try {
             val apiResult =
-                if (aiModel == AiModel.DEEEP_SEEK) chatRepository.sendMessageToAiDeep(models)
-                else chatRepository.sendMessageToAiQwen(models)
+                if (aiModel == AiModel.DEEEP_SEEK) chatRepository.sendMessageToAiDeep(models, aiModel)
+                else chatRepository.sendMessageToAiQwen(models, aiModel)
             UseCaseResult.Success(apiResult)
         } catch (e: Exception) {
             UseCaseResult.Error(e.message ?: "Unknown error")
