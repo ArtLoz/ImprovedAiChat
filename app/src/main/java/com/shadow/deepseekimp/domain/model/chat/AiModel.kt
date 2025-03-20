@@ -12,7 +12,7 @@ enum class AiModel(
     val modelApiName: String,
 ) {
     DEEEP_SEEK(
-        valueIcon = R.drawable.ic_deepseek,
+        valueIcon = R.drawable.ic_deep_new,
         valueNameLocal = R.string.aiModel_deep_seek,
         iconColor = colorDeepSeek,
         modelApiName = "deepseek-chat"
