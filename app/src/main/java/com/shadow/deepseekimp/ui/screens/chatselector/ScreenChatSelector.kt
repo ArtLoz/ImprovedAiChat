@@ -1,5 +1,6 @@
 package com.shadow.deepseekimp.ui.screens.chatselector
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.SharedTransitionScope
@@ -7,6 +8,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +24,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -30,17 +34,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mikepenz.markdown.compose.components.markdownComponents
+import com.mikepenz.markdown.compose.elements.MarkdownHighlightedCodeBlock
+import com.mikepenz.markdown.compose.elements.MarkdownHighlightedCodeFence
+import com.mikepenz.markdown.m3.Markdown
+import com.mikepenz.markdown.m3.markdownTypography
 import com.shadow.deepseekimp.ui.nav.NavScreens
 import com.shadow.deepseekimp.ui.nav.NavigationController
 import com.shadow.deepseekimp.R
 import com.shadow.deepseekimp.domain.model.chat.AiModel
 import com.shadow.deepseekimp.ui.baseui.AiModelContext
+import com.shadow.deepseekimp.ui.baseui.HorizontalPagerPrompt
 import com.shadow.deepseekimp.ui.baseui.MainButton
 import com.shadow.deepseekimp.ui.baseui.MainButtonOutlined
 import com.shadow.deepseekimp.ui.baseui.custompopup.CustomPopup
@@ -49,6 +63,8 @@ import com.shadow.deepseekimp.ui.screens.chatselector.model.ChatSelectorIntent
 import com.shadow.deepseekimp.ui.screens.chatselector.model.ScreenModel
 import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_HISTORY
 import com.shadow.deepseekimp.ui.utils.SHARED_TITLE_KEY_ONE
+import dev.snipme.highlights.Highlights
+import dev.snipme.highlights.model.SyntaxThemes
 
 @Composable
 fun ScreenChatSelector(
@@ -59,30 +75,33 @@ fun ScreenChatSelector(
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val screenModel = viewModel.screenModel.collectAsState().value
+    val screenHeight = LocalConfiguration.current.screenHeightDp
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
-        Crossfade( targetState = screenModel.currentAiModel.valueIcon,
+        Crossfade(
+            modifier = Modifier
+                .padding(top = (screenHeight * 0.25f).dp)
+                .align(Alignment.TopCenter),
+            targetState = screenModel.currentAiModel.valueIcon,
             animationSpec = tween(1800)
         ) { icon ->
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Icon(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth(),
                     painter = painterResource(icon),
                     contentDescription = null,
                     tint = Color.Gray.copy(alpha = 0.1f)
                 )
             }
         }
-
-        AiModelController(
-            modifier = Modifier.align(Alignment.TopEnd),
-            screenModel = screenModel,
-            onElementClick = { viewModel.processIntent(ChatSelectorIntent.SelectAiModel(it)) }
-        )
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(top = (screenHeight * 0.3f).dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -104,7 +123,10 @@ fun ScreenChatSelector(
                         contentDescription = null,
                     )
                     Text(
-                        text = stringResource(R.string.chat_selector_by_model, stringResource(screenModel.currentAiModel.valueNameLocal)),
+                        text = stringResource(
+                            R.string.chat_selector_by_model,
+                            stringResource(screenModel.currentAiModel.valueNameLocal)
+                        ),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
                     )
@@ -136,55 +158,51 @@ fun ScreenChatSelector(
                     }
                 }
             }
+
+        }
+
+        HorizontalPagerPrompt(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            listPrompt = screenModel.listAiModel,
+            firstCurrentModel = screenModel.firstInitModel,
+            onClickElement = {viewModel.processIntent(ChatSelectorIntent.ShowDetailInfo)},
+            currentPage = {
+                viewModel.processIntent(ChatSelectorIntent.SelectAiModel(screenModel.listAiModel[it]))
+            }
+        )
+        if(screenModel.showDetailInfo){
+            BottomFullDescription(
+                currentAiModel = screenModel.currentAiModel,
+                onDismiss = { viewModel.processIntent(ChatSelectorIntent.HideDetailInfo) }
+            )
         }
     }
 }
-
 @Composable
-fun AiModelController(
+fun BottomFullDescription(
     modifier: Modifier = Modifier,
-    screenModel: ScreenModel,
-    onElementClick: (AiModel) -> Unit
+    currentAiModel: AiModel,
+    onDismiss: () -> Unit
 ){
-    val popupState: PopupState = remember {
-        PopupState(false, )
-    }
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .clickable { popupState.isVisible = true }
-            .padding(horizontal = 14.dp)
-            .animateContentSize(),
-        verticalAlignment = Alignment.CenterVertically,
-
-        ) {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(screenModel.currentAiModel.valueIcon),
-            contentDescription = null,
-            tint = screenModel.currentAiModel.iconColor
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            text = stringResource(screenModel.currentAiModel.valueNameLocal),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Icon(
-            imageVector = Icons.Default.ArrowDropDown,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground
-        )
-        CustomPopup(popupState = popupState,
-            offset = DpOffset(0.dp, 14.dp),
-            onDismissRequest = { popupState.isVisible  = false }) {
-            AiModelContext(
-                listAiModel = screenModel.listAiModel,
-                onElementClick = {
-                    popupState.isVisible = false
-                    onElementClick.invoke(it)
-                }
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        sheetState = state,
+        modifier = modifier,
+        onDismissRequest = onDismiss
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 14.dp)) {
+            Text(
+                text = stringResource(currentAiModel.title),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Text(
+                modifier = Modifier.padding(vertical = 14.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(currentAiModel.descriptionExpanded),
             )
         }
-
     }
 }

@@ -1,5 +1,6 @@
 package com.shadow.deepseekimp.ui.screens.chatselector
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.shadow.deepseekimp.data.repository.AiModelRepository
 import com.shadow.deepseekimp.domain.model.chat.AiModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScreenChatSelectorViewModel @Inject constructor(
     private val getCurrentAiModelUseCase: GetCurrentAiModelUseCase,
-    private val saveCurrentAiModelUseCase: SaveCurrentAiModelUseCase
+    private val saveCurrentAiModelUseCase: SaveCurrentAiModelUseCase,
 ) : ViewModel() {
 
     private val _screenModel = MutableStateFlow(ScreenModel())
@@ -27,8 +28,9 @@ class ScreenChatSelectorViewModel @Inject constructor(
 
     init {
         io {
-            when (val result = getCurrentAiModelUseCase()) {
-                is UseCaseResult.Success -> _screenModel.update { it.copy(currentAiModel = result.model) }
+            val result = getCurrentAiModelUseCase()
+            when (result) {
+                is UseCaseResult.Success -> _screenModel.update { it.copy(firstInitModel = result.model) }
                 else -> Unit
             }
         }
@@ -37,6 +39,18 @@ class ScreenChatSelectorViewModel @Inject constructor(
     fun processIntent(intent: ChatSelectorIntent) {
         when (intent) {
             is ChatSelectorIntent.SelectAiModel -> swapAiModel(intent.aiModel)
+            ChatSelectorIntent.HideDetailInfo -> _screenModel.update {
+                it.copy(
+                    showDetailInfo = false
+                )
+            }
+            ChatSelectorIntent.ShowDetailInfo -> {
+                _screenModel.update {
+                    it.copy(
+                        showDetailInfo = true
+                    )
+                }
+            }
         }
     }
 

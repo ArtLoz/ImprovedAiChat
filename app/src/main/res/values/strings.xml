@@ -4,6 +4,7 @@
     <string name="chat_selector_by_model">by %s</string>
     <string name="chat_selector_one_chat">One time chat</string>
     <string name="chat_selector_history">History chat</string>
+    <string name="chat_selector_img_prompt">Prompt Image</string>
 
     <string name="chat_screen_hint">Ask your question to DeepSeek AI</string>
     <string name="chat_history_clear">Are you sure you want to clear the chat history?</string>
@@ -11,7 +12,7 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
 
-    <string name="aiModel_deep_seek">DeepSeek R1</string>
+    <string name="aiModel_deep_seek">DeepSeek V3</string>
     <string name="aiModel_qwen_max">Qwen Max</string>
     <string name="aiModel_qwen_plus">Qwen Plus</string>
 
@@ -19,4 +20,48 @@
     <string name="cd_button_send_msg">Button send chat message</string>
     <string name="cd_button_copy_ai_msg">Button copy message from AI</string>
 
+    <string name="deep_seek_title">DeepSeek Chat API – Advanced AI for Text &amp; Code</string>
+    <string name="deep_seek_des">✅ 128K context | 📄 Doc analysis | 💻 Code generation \n🌍 Multilingual | 🔥 Free &amp; fast | No fluff, just answers \n\n*"Drop a prompt, get results—like GPT-4 but leaner."*</string>
+    <string name="qwen_max_title">Qwen Max— Power in Every Response ⚡🤖</string>
+    <string name="qwen_max_description">Qwen Max, powered by Alibaba Cloud, is the advanced version of your intelligent assistant designed to handle the toughest tasks 🚀, I deliver precise and reliable solutions. Let’s achieve great things together! 🌟></string>
+
+    <string name="qwen_plus_title">I\'m Qwen plus- your personal assistant 🌍✨</string>
+    <string name="qwen_plus_description">✅ Provide fast and clear answers to all your questions\n✅ Help with texts, ideas and problem solving\n✅ Work 24/7 no matter where you are \n✅ Always happy to assist you! 😊</string>
+
+
+    <string name="deep_seek_des_exp">**DeepSeek Chat** – Your Ultimate AI Assistant 🤖✨\n\n### 🌟 Key Features \n- **📝 Smart Q&amp;A** – Instant expert answers \n- **📂 Document Master** – Analyze PDFs/Word \n- **👨💻 Code Genius** – Write &amp; debug code \n- **🌍 Fluent Translator** – 20+ languages \n\n### 🔥 Why Choose Me? \n✅ **128K context** – Remembers long chats \n✅ **Free forever** – No hidden costs\n\nTry: *"Explain AI simply"* or *"Fix this code"*</string>
+    <string name="qwen_plus_des_exp">"Qwen: Your All-in-One AI Assistant 🌟\n\n"
+"Hello! I'm Qwen, a powerful and friendly AI assistant designed to make your life easier, more productive, and fun. Whether you're looking for information, need help with creative tasks, or just want to chat, I'm here to assist you anytime, anywhere.\n\n"
+"✨ What makes Qwen special?\n\n"
+"• Unlimited Knowledge: I can answer questions on virtually any topic, from science and history to pop culture and technology. Need facts, explanations, or solutions? I've got you covered!\n\n"
+"• Creative Partner: Struggling with writing, brainstorming ideas, or designing content? Let me help! I excel at generating high-quality text, such as articles, stories, emails, scripts, and more. Perfect for students, writers, and professionals alike.\n\n"
+"• Practical Helper: From solving math problems to planning trips, offering language translations, or debugging code snippets, I’m your go-to tool for everyday challenges. Need something specific? Just ask!\n\n"
+"• Always Available: No matter where you are in the world or what time it is, I’m ready to assist. With 24/7 support, you’ll never be alone when facing a question or task.\n\n"
+"• User-Friendly &amp; Multilingual: Communicate naturally—no complicated commands required. Plus, I understand and respond in multiple languages, making me your perfect global companion.\n\n"
+"Whether you’re studying, working, traveling, or simply exploring new ideas, Qwen is here to empower you. Let’s get started together and discover how AI can enhance your daily life! 😊\n\n"
+"Join millions of users worldwide who trust Qwen to simplify their lives. Try me now!"</string>
+    <string name="qwen_max_des_exp">String assistantDescription = "AI-Powered Virtual Assistant\n\n" +
+"I am your intelligent assistant, designed to make your life easier and more efficient. Here’s what I can do:\n\n" +
+"💬 Answer questions and engage in conversations on any topic\n" +
+"📝 Write texts, emails, articles, and documents\n" +
+"🌐 Translate content into multiple languages\n" +
+"🧠 Solve complex problems and provide useful advice\n" +
+"📊 Analyze information and draw conclusions\n" +
+"🎯 Generate creative ideas and solutions\n" +
+"📅 Help plan tasks and manage your time\n\n" +
+"My advantages:\n" +
+"⚡ Fast response times\n" +
+"🎯 Accurate and reliable answers\n" +
+"🔒 Ensures privacy and security of your data\n" +
+"📱 Accessible 24/7 from any device\n" +
+"📈 Continuously learning and improving\n\n" +
+"Use me for:\n" +
+"• Getting quick answers to your questions\n" +
+"• Writing various types of content\n" +
+"• Translating documents\n" +
+"• Generating ideas and solutions\n" +
+"• Enhancing workflows\n" +
+"• Effective time management\n\n" +
+"I’m here to help you work smarter and achieve your goals faster!";
+</string>
 </resources>

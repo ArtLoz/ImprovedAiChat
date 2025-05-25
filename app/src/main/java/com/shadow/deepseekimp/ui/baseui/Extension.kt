@@ -5,10 +5,12 @@ package com.shadow.deepseekimp.ui.baseui
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -27,6 +29,7 @@ import kotlin.reflect.safeCast
 inline fun ViewModel.io(crossinline suspender: suspend () -> Unit): Job {
     return viewModelScope.launch(Dispatchers.IO) {
         suspender()
+        Int
     }
 }
 
@@ -64,4 +67,13 @@ fun <T : Any> LazyListState.rememberLastVisibleItemKey(keyClass: KClass<T>): Sta
             keyClass.safeCast(key) // Безопасное приведение
         }
     }
+}
+fun PagerState.offsetForPage(page: Int) = (currentPage - page) + currentPageOffsetFraction
+
+fun PagerState.startOffsetForPage(page: Int): Float {
+    return offsetForPage(page).coerceAtLeast(0f)
+}
+
+fun PagerState.endOffsetForPage(page: Int): Float {
+    return offsetForPage(page).coerceAtMost(0f)
 }
