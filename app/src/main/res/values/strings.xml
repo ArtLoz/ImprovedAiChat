@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Improved AI Chat</string>
+    <string name="app_name" translatable="false">Improved AI Chat</string>
+    <string name="aiModel_deep_seek" translatable="false">DeepSeek V3</string>
+    <string name="aiModel_qwen_max" translatable="false">Qwen Max</string>
+    <string name="aiModel_qwen_plus" translatable="false">Qwen Plus</string>
     <string name="chat_selector_choose_chat">Choose your AI chat</string>
     <string name="chat_selector_by_model">by %s</string>
     <string name="chat_selector_one_chat">One time chat</string>
@@ -12,15 +15,13 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
 
-    <string name="aiModel_deep_seek">DeepSeek V3</string>
-    <string name="aiModel_qwen_max">Qwen Max</string>
-    <string name="aiModel_qwen_plus">Qwen Plus</string>
+
 
     <string name="cd_button_clear_chat">Button cleat history chat</string>
     <string name="cd_button_send_msg">Button send chat message</string>
     <string name="cd_button_copy_ai_msg">Button copy message from AI</string>
 
-    <string name="deep_seek_title">DeepSeek Chat API – Advanced AI for Text &amp; Code</string>
+    <string name="deep_seek_title">DeepSeek Chat AI – Advanced AI for Text &amp; Code</string>
     <string name="deep_seek_des">✅ 128K context | 📄 Doc analysis | 💻 Code generation \n🌍 Multilingual | 🔥 Free &amp; fast | No fluff, just answers \n\n*"Drop a prompt, get results—like GPT-4 but leaner."*</string>
     <string name="qwen_max_title">Qwen Max— Power in Every Response ⚡🤖</string>
     <string name="qwen_max_description">Qwen Max, powered by Alibaba Cloud, is the advanced version of your intelligent assistant designed to handle the toughest tasks 🚀, I deliver precise and reliable solutions. Let’s achieve great things together! 🌟></string>

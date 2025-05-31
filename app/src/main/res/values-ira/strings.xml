@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Improved AI Chat</string>
+    <string name="aiModel_deep_seek">DeepSeek V3</string>
+    <string name="aiModel_qwen_max">Qwen Max</string>
+    <string name="aiModel_qwen_plus">Qwen Plus</string>
+    <string name="chat_selector_choose_chat">گفتگوی هوش مصنوعی خود را انتخاب کنید</string>
+    <string name="chat_selector_by_model">بر اساس %s</string>
+    <string name="chat_selector_one_chat">گفتگوی یک‌باره</string>
+    <string name="chat_selector_history">گفتگوی تاریخی</string>
+    <string name="chat_selector_img_prompt">تصویر پیشنهادی</string>
+    <string name="chat_screen_hint">سوال خود را از دیپ‌سیک بپرسید</string>
+    <string name="chat_history_clear">آیا مطمئن هستید که می‌خواهید تاریخچه گفتگو را پاک کنید؟</string>
+    <string name="dialog_ok">تایید</string>
+    <string name="dialog_cancel">لغو</string>
+    <string name="cd_button_clear_chat">دکمه پاک کردن تاریخچه گفتگو</string>
+    <string name="cd_button_send_msg">دکمه ارسال پیام گفتگو</string>
+    <string name="cd_button_copy_ai_msg">دکمه کپی پیام از هوش مصنوعی</string>
+    <string name="deep_seek_title">AI چت DeepSeek – هوش مصنوعی پیشرفته برای متن و کد</string>
+    <string name="deep_seek_des">✅ زمینه ۱۲۸K | 📄 تحلیل اسناد | 💻 تولید کد\n🌍 چندزبانه | 🔥 سریع و رایگان\n\n*\"یک پرامپت وارد کنید، پاسخ بگیرید – مثل GPT-4 ولی سبک‌تر.\"*</string>
+    <string name="qwen_max_title">Qwen Max — قدرت در هر پاسخ ⚡🤖</string>
+    <string name="qwen_max_description">Qwen Max با پشتیبانی از Alibaba Cloud، نسخه پیشرفته دستیار هوشمند شماست که برای سخت‌ترین وظایف طراحی شده 🚀. من راه‌حل‌های دقیق و قابل اعتماد ارائه می‌دهم. بیایید با هم کارهای بزرگ انجام دهیم! 🌟</string>
+    <string name="qwen_plus_title">من Qwen Plus هستم - دستیار شخصی شما 🌍✨</string>
+    <string name="qwen_plus_description">✅ پاسخ‌های سریع و شفاف به همه سوالات شما\n✅ کمک در نوشتن متن، ایده‌پردازی و حل مسائل\n✅ در هر زمان و مکان در دسترس هستم\n✅ با خوشحالی کمک می‌کنم! 😊</string>
+    <string name="deep_seek_des_exp">**چت DeepSeek** – دستیار نهایی هوش مصنوعی شما 🤖✨\n\n### 🌟 ویژگی‌های کلیدی \n- **📝 پاسخ هوشمند** – پاسخ‌های فوری تخصصی \n- **📂 تحلیلگر اسناد** – بررسی PDF/Word \n- **👨💻 نابغه کد** – نوشتن و دیباگ کد \n- **🌍 مترجم روان** – بیش از ۲۰ زبان \n\n### 🔥 چرا من؟ \n✅ **128K کانتکست** – یادآوری گفتگوهای طولانی \n✅ **همیشه رایگان** – بدون هزینه پنهان\n\nامتحان کنید: *\"هوش مصنوعی را ساده توضیح بده\"* یا *\"این کد را اصلاح کن\"*</string>
+    <string name="qwen_plus_des_exp">کوئن: دستیار همه‌کاره هوش مصنوعی شما 🌟\n\nسلام! من کوئن هستم و برای آسان‌تر و مفیدتر کردن زندگی شما طراحی شده‌ام.\n\n✨ چرا کوئن خاص است؟\n\n• دانش بی‌پایان\n• شریک خلاق\n• ابزار عملی برای چالش‌ها\n• در دسترس همیشه\n• چندزبانه و آسان\n\nچه مطالعه، کار یا سفر، من اینجا هستم تا کمک کنم.\n\nبه میلیون‌ها کاربر بپیوندید — همین حالا امتحانم کنید!</string>
+    <string name="qwen_max_des_exp">دستیار مجازی هوش مصنوعی\n\nمن دستیار هوشمند شما هستم.\n\n💬 پاسخ به سوالات\n📝 نوشتن مطالب\n🌐 ترجمه زبان‌ها\n🧠 حل مشکلات\n📊 تحلیل اطلاعات\n🎯 تولید ایده\n📅 برنامه‌ریزی\n\n⚡ سریع\n🎯 دقیق\n🔒 ایمن\n📱 همیشه فعال\n📈 در حال پیشرفت\n\nبیایید با هم بهتر کار کنیم!</string>
+</resources>

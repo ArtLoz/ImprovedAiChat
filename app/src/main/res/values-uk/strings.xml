@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Improved AI Chat</string>
+    <string name="aiModel_deep_seek">DeepSeek V3</string>
+    <string name="aiModel_qwen_max">Qwen Max</string>
+    <string name="aiModel_qwen_plus">Qwen Plus</string>
+    <string name="chat_selector_choose_chat">Виберіть свій AI-чат</string>
+    <string name="chat_selector_by_model">за %s</string>
+    <string name="chat_selector_one_chat">Одноразовий чат</string>
+    <string name="chat_selector_history">Чат з історією</string>
+    <string name="chat_selector_img_prompt">Підказка зображення</string>
+    <string name="chat_screen_hint">Поставте своє запитання DeepSeek AI</string>
+    <string name="chat_history_clear">Ви впевнені, що хочете очистити історію чату?</string>
+    <string name="dialog_ok">ОК</string>
+    <string name="dialog_cancel">Скасувати</string>
+    <string name="cd_button_clear_chat">Кнопка очищення історії чату</string>
+    <string name="cd_button_send_msg">Кнопка надсилання повідомлення</string>
+    <string name="cd_button_copy_ai_msg">Кнопка копіювання повідомлення від AI</string>
+    <string name="deep_seek_title">DeepSeek AI – Потужний AI для тексту та коду</string>
+    <string name="deep_seek_des">✅ Контекст 128K | 📄 Аналіз документів | 💻 Генерація коду\n🌍 Багатомовність | 🔥 Швидко та безкоштовно\n\n*\"Введіть підказку — отримайте результат. Як GPT-4, тільки швидше.\"*</string>
+    <string name="qwen_max_title">Qwen Max — Потужність у кожній відповіді ⚡🤖</string>
+    <string name="qwen_max_description">Qwen Max, на базі Alibaba Cloud — це покращена версія вашого інтелектуального помічника, що справляється з найскладнішими завданнями 🚀. Я забезпечую точні та надійні рішення. Давайте досягати більшого разом! 🌟</string>
+    <string name="qwen_plus_title">Я — Qwen Plus, ваш персональний асистент 🌍✨</string>
+    <string name="qwen_plus_description">✅ Швидкі та чіткі відповіді на всі ваші запитання\n✅ Допомога з текстами, ідеями та задачами\n✅ Працюю 24/7, де б ви не були\n✅ Завжди радий допомогти! 😊</string>
+    <string name="deep_seek_des_exp">**Чат DeepSeek** – Ваш найкращий AI-помічник 🤖✨\n\n### 🌟 Основні можливості \n- **📝 Розумне Q&amp;A** – миттєві експертні відповіді \n- **📂 Документовед** – аналіз PDF/Word \n- **👨💻 Кодер-гений** – написання та налагодження коду \n- **🌍 Перекладач** – 20+ мов \n\n### 🔥 Чому саме я? \n✅ **Контекст 128K** – пам’ятає довгі чати \n✅ **Завжди безкоштовно** – без прихованих витрат\n\nСпробуйте: *\"Поясни AI просто\"* або *\"Виправ цей код\"*</string>
+    <string name="qwen_plus_des_exp">Qwen: Ваш універсальний AI-помічник 🌟\n\nПривіт! Я Qwen — потужний і дружній AI-помічник, створений, щоб зробити ваше життя легшим.\n\n✨ Що робить Qwen особливим?\n\n• Необмежені знання: відповіді на будь-яку тему\n• Творчий партнер: статті, історії, листи\n• Практичний помічник: переклад, код, задачі\n• Завжди доступний: 24/7\n• Багатомовний і зручний\n\nQwen — тут, щоб допомогти вам кожного дня!\n\nДолучайтесь до мільйонів користувачів — спробуйте мене зараз!</string>
+    <string name="qwen_max_des_exp">Віртуальний AI-помічник\n\nЯ — ваш розумний асистент, який робить життя простішим.\n\n💬 Відповіді на питання\n📝 Написання текстів\n🌐 Переклад мов\n🧠 Рішення проблем\n📊 Аналіз інформації\n🎯 Ідеї\n📅 Планування часу\n\n⚡ Швидко\n🎯 Точно\n🔒 Безпечно\n📱 Завжди\n📈 Навчаюсь\n\nЯ тут, щоб допомогти вам досягти більше!</string>
+</resources>
